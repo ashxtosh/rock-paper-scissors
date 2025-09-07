@@ -23,49 +23,81 @@ let humanChoice; let computerChoice;
 function playRound(humanChoice, computerChoice) {
     if (humanChoice === "rock") {
         if (computerChoice === "rock") {
-            alert("Draw.");
+            return "Draw.";
         } else if (computerChoice === "paper") {
-            alert("You lost this round.");
             computerScore++;
-
+            return "You lost this round.";
         } else {
-            alert("You won this round.");
             humanScore++;
+            return "You won this round.";
         }
     } else if (humanChoice === "paper"){
         if (computerChoice === "rock") {
-            alert("You won this round.");
             humanScore++;
+            return "You won this round.";
         } else if (computerChoice === "paper") {
-            alert("Draw.");
+            return "Draw.";
         } else {
-            alert("You lost this round.");
             computerScore++;
+            return "You lost this round.";
         }
     } else {
         if (computerChoice === "rock") {
-            alert("You lost this round.");
             computerScore++;
+            return "You lost this round.";
         } else if (computerChoice === "paper") {
-            alert("You won this round.");
             humanScore++;
+            return "You won this round.";
         } else {
-            alert("Draw.");
+            return "Draw.";
         }
     }
-};
-
-function playGame() {
-    humanScore = 0;
-    computerScore = 0;
-    for(let i = 0; i < 5; i++) {
-        let num = parseInt(prompt("Enter 1 for rock, 2 for paper, 3 for scissors:"));
-        humanChoice = getHumanChoice(num);
-        computerChoice = getComputerChoice();
-        playRound(humanChoice, computerChoice);
-        alert(`Your score: ${humanScore} Computer score: ${computerScore}`);
-    }
-    alert("Thank you for playing!");
 }
 
-playGame();
+
+const btns = document.querySelectorAll("button");
+const resultsDiv = document.querySelector("span");
+
+const scoreDisplay = document.createElement("p");
+resultsDiv.appendChild(scoreDisplay);
+
+btns.forEach(button => {
+    button.addEventListener('click', function(){
+        const humanChoice = button.id; // "rock", "paper", or "scissors"
+        const computerChoice = getComputerChoice();
+
+        const roundLine = document.createElement("p");
+
+        roundLine.textContent = playRound(humanChoice, computerChoice);
+
+        resultsDiv.appendChild(roundLine);
+
+        scoreDisplay.textContent = `Your score: ${humanScore} | Computer score: ${computerScore}`;
+
+        if(humanScore === 5 || computerScore === 5) {
+            const winner = humanScore === 5 ? "You won the game! 🎉" : "Computer won the game! 🤖";
+            const winnerMsg = document.createElement("h3");
+            winnerMsg.textContent = winner;
+            resultsDiv.appendChild(winnerMsg);
+
+            btns.forEach(b => b.disabled = true);
+        }
+
+    })
+})
+
+
+
+
+// function playGame() {
+//     humanScore = 0;
+//     computerScore = 0;
+//     for(let i = 0; i < 5; i++) {
+//         let num = parseInt(prompt("Enter 1 for rock, 2 for paper, 3 for scissors:"));
+//         humanChoice = getHumanChoice(num);
+//         computerChoice = getComputerChoice();
+//         playRound(humanChoice, computerChoice);
+//         alert(`Your score: ${humanScore} Computer score: ${computerScore}`);
+//     }
+//     alert("Thank you for playing!");
+// }
